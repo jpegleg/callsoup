@@ -1,0 +1,2 @@
+# callsoup
+actix + rustls + redis
