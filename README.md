@@ -18,6 +18,9 @@ There are a few required files:
 - static/index.html - the default GET response, any other web pages within static/ are optional
 ```
 
+
+## About the template
+
 The callsoup template includes two modules which represent the two function demos:
 
 stor.rs which fetches values from redis, with the redis key provided in a POST body
