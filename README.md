@@ -21,6 +21,13 @@ but is really just an example that can be further modified to build out more adv
 callback type functionality. 
 
 The POST body data in these two example functionalities is straight text in, JSON out.
+`$CALLBACK_TARGET` would be the place to send your callback to, such as `https://somemetrics.someplace.somewhere/api/v1/metrics` or whatever the
+DNS name is for the system you need to send the callback or healthcheck to, etc etc. Then `$CALLSOUPURL` would be the endpoint you have
+for your callsoup service, such as `https://myplace.local:3333` or however you service it up. It could also be used on a loopback device, or
+different port, just change the bind stanza if such a thing is needed. 
+
+These are cURL examples, but potentialy instead of curl, you might more likely bake in HTTP requests to the callsoup service for
+your other applications. 
 
 ```
 curl -X POST -H "Content-Type: application/json" --data "$CALLBACK_TARGET" "$CALLSOUPURL"/api/fetch
@@ -28,8 +35,7 @@ curl -X POST -H "Content-Type: application/json" --data "$CALLBACK_TARGET" "$CAL
 ```
 
 The fetch output includes a UUID which can be used to trace the transaction on the server side.
-The JSON structure returned is a simple and rigidly constructed. A production app might expand
-on that JSON response.
+The JSON structure in the example template is simple:
 
 fetch success: `{ "Ok(())": "809b1d8e-75a5-4e52-a1e3-a02d68de0b37" }`
 
