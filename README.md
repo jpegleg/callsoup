@@ -8,7 +8,17 @@ With that healthcheck removed, callsoup has dropped curl libraries. Instead of u
 callsoup uses reqwest for callbacks. Callsoup also supports processing of request bodies via
 actix-http and bytes crates. Another difference is binding to port 3333 instead of 443.
 
-The callsoup template includes two modueles which represent the two function demos:
+## Configuration
+
+There are a few required files:
+
+```
+- cert.pem - the server identity certificate as a PKCS8
+- key.pem - the key used to create the server identity certificate
+- static/index.html - the default GET response, any other web pages within static/ are optional
+```
+
+The callsoup template includes two modules which represent the two function demos:
 
 stor.rs which fetches values from redis, with the redis key provided in a POST body
 
