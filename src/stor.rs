@@ -14,9 +14,27 @@ pub async fn gon(req: HttpRequest, body: web::Bytes) -> impl Responder {
     let requ = req.headers();
     let readi: DateTime<Utc> = Utc::now();
     log::info!("{} - {:?} - /api/storage POST request (fetch redis key) - from {:?} - {:?}", readi, &txid, peer, &requ);
-    let bbod = to_bytes(body).await.unwrap();
-    let sbod = std::str::from_utf8(&bbod).unwrap();
-    let gotit = format!("{{ \"data\": {:?} }}", redisget(sbod).await.unwrap()); 
+    let mut bbod = to_bytes(body).await.unwrap();
+    let sbod: Result<String, _> = match std::str::from_utf8(&bbod) {
+        Ok(string) => {
+            let seasnails = std::str::from_utf8(&bbod).unwrap().to_string();    
+            Ok(seasnails)
+        },
+        _ => {
+            let seasnails = "ERROR: non-utf8 data received.".to_string();
+            Err(seasnails)
+        }
+    };
+    
+    let mut return_me = String::new();
+    match sbod {
+        Err(_) => return_me = "ERROR: non-utf8 data received.".to_string(), 
+        _ => return_me = sbod.unwrap(),
+    }
+
+    let rbod = return_me;
+    let gotit = format!("{{ \"data\": {:?} }}", redisget(&rbod).await.unwrap());
+
     let nid = env::var("txid").unwrap();
     let reada: DateTime<Utc> = Utc::now();
     log::info!("{} - {} - /api/storage response from redis - {:?}", reada, &nid, &gotit);
